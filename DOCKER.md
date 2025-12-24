@@ -1,56 +1,48 @@
 # Docker Setup
 
-## Build the Docker image
-
-```bash
-docker build --build-arg BASEURL=https://your-api-url.com -t notesapp-viewer .
-```
-
-Or build without specifying BASEURL (will use empty string):
-
-```bash
-docker build -t notesapp-viewer .
-```
-
-## Run the container
-
-```bash
-docker run -p 3000:80 notesapp-viewer
-```
-
-The app will be available at http://localhost:3000
-
-## Using Docker Compose
+## Local Development
 
 1. Create a `.env` file in the root directory:
 ```
-BASEURL=https://your-api-url.com
+VITE_API_BASE_URL=https://your-api-url.com
 ```
 
-2. Build and run:
+2. Run locally:
+```bash
+npm start
+```
+
+## Docker Build (for Railway)
+
+Railway will automatically pass the `VITE_API_BASE_URL` service variable as an environment variable during build time. No additional configuration needed!
+
+## Build and Run Docker Image Locally
+
+```bash
+# Build (VITE_API_BASE_URL from environment variable)
+VITE_API_BASE_URL=https://your-api-url.com docker build -t notesapp-viewer .
+
+# Run
+docker run -p 3000:80 notesapp-viewer
+```
+
+Or using docker-compose:
+
 ```bash
 docker-compose up --build
 ```
 
-Or run in detached mode:
-```bash
-docker-compose up -d --build
-```
-
-3. To stop:
-```bash
-docker-compose down
-```
+The app will be available at http://localhost:3000
 
 ## Environment Variables
 
-- `BASEURL`: The API base URL (required at build time). This will be baked into the build.
-  
-  Example: `BASEURL=https://api.example.com`
+- **Local**: Set `VITE_API_BASE_URL` in `.env` file
+- **Railway**: Set `VITE_API_BASE_URL` as a service variable (automatically available during build)
 
 ## Notes
 
-- The BASEURL is embedded at build time, not runtime
+- Vite automatically exposes environment variables prefixed with `VITE_` to the client
+- The VITE_API_BASE_URL is embedded at build time
 - The app is served using nginx on port 80 inside the container
-- Port mapping: Container port 80 → Host port 3000 (change in docker-compose.yml if needed)
+- Port mapping: Container port 80 → Host port 3000
 - The nginx configuration supports React Router (SPA routing)

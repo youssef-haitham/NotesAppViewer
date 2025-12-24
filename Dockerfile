@@ -12,9 +12,10 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-# Build argument for API base URL
-ARG BASEURL=""
-ENV BASEURL=${BASEURL}
+# Build argument (Railway service variables are automatically available as env vars)
+# For local build, pass: docker build --build-arg VITE_API_BASE_URL=https://api.example.com
+ARG VITE_API_BASE_URL
+ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
 
 # Build the app
 RUN npm run build
