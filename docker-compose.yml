@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  notesapp-viewer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        BASEURL: ${BASEURL:-http://localhost:8000}
+    ports:
+      - "3000:80"
+    environment:
+      - BASEURL=${BASEURL:-http://localhost:8000}
+    restart: unless-stopped
