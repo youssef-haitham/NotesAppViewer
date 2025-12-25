@@ -1,4 +1,6 @@
-# Stage 1: Build the React app
+# ===============================
+# Stage 1: Build React app
+# ===============================
 FROM node:18-alpine AS builder
 
 WORKDIR /app
@@ -12,25 +14,27 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-# Build argument (Railway service variables are automatically available as env vars)
-# For local build, pass: docker build --build-arg VITE_API_BASE_URL=https://api.example.com
+# Build-time env variable (Railway provides it)
 ARG VITE_API_BASE_URL
 ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
 
 # Build the app
 RUN npm run build
 
-# Stage 2: Serve with nginx
+
+# ===============================
+# Stage 2: Serve with Nginx
+# ===============================
 FROM nginx:alpine
 
-# Copy built assets from builder stage
+# Copy built files
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Copy nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copy nginx template (IMPORTANT)
+COPY nginx.conf /etc/nginx/templates/default.conf.template
 
-# Expose port 80
-EXPOSE 80
+# Railway provides PORT env var
+EXPOSE 3000
 
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Replace PORT at runtime then start nginx
+CMD ["/bin/sh", "-c", "envsubst '$PORT' < /etc/nginx/templates/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
