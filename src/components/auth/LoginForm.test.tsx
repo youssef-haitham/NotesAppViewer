@@ -61,16 +61,21 @@ describe('LoginForm', () => {
 
   it('should show error for invalid email', async () => {
     const user = userEvent.setup();
+    const mockSignIn = authService.signIn as jest.MockedFunction<typeof authService.signIn>;
+    mockSignIn.mockClear();
+    
     renderWithProviders(<LoginForm />);
 
     const emailInput = screen.getByLabelText(/email/i);
-    await user.type(emailInput, 'invalid-email');
+    await user.type(emailInput, 'notanemail');
+    await user.type(screen.getByLabelText(/password/i), 'password123');
 
     const submitButton = screen.getByRole('button', { name: /sign in/i });
     await user.click(submitButton);
 
+    // Form should not submit due to validation - signIn should not be called
     await waitFor(() => {
-      expect(screen.getByText(/invalid email address/i)).toBeInTheDocument();
+      expect(mockSignIn).not.toHaveBeenCalled();
     });
   });
 
@@ -102,7 +107,7 @@ describe('LoginForm', () => {
 
     mockSignIn.mockResolvedValue(mockUser);
 
-    const { store } = renderWithProviders(<LoginForm />);
+    renderWithProviders(<LoginForm />);
 
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);

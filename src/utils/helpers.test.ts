@@ -1,5 +1,5 @@
-import { formatDate, getColorClass, truncateText } from '../helpers';
-import { Colors } from '../../types/note.types';
+import { formatDate, getColorClass, truncateText } from './helpers';
+import { Colors } from '../types/note.types';
 
 describe('helpers', () => {
   describe('formatDate', () => {

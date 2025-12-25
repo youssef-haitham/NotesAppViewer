@@ -1,13 +1,16 @@
 import '@testing-library/jest-dom';
 
-// Mock import.meta.env for Vite in test environment
-(globalThis as any).import = {
-  meta: {
-    env: {
-      VITE_API_BASE_URL: 'http://localhost:3000',
-    },
+// Mock constants module to avoid import.meta issues in Jest
+// This path matches how constants is imported: '../utils/constants' from services, './utils/constants' from pages, etc.
+jest.mock('./utils/constants', () => ({
+  API_BASE_URL: 'http://localhost:3000',
+  ROUTES: {
+    LOGIN: '/login',
+    SIGNUP: '/signup',
+    NOTES: '/notes',
+    NOTE_DETAIL: (id: string) => `/notes/${id}`,
   },
-};
+}));
 
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {

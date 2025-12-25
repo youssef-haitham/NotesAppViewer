@@ -124,7 +124,9 @@ describe('NotesPage', () => {
     await user.click(newNoteButton);
 
     expect(screen.getByText(/new note/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /cancel/i })).toBeInTheDocument();
+    // There are two cancel buttons when form is shown - header and form. Check that at least one exists.
+    const cancelButtons = screen.getAllByRole('button', { name: /cancel/i });
+    expect(cancelButtons.length).toBeGreaterThan(0);
   });
 
   it('should show NoteForm when showForm is true', async () => {
@@ -136,7 +138,9 @@ describe('NotesPage', () => {
     const newNoteButton = screen.getByRole('button', { name: /new note/i });
     await user.click(newNoteButton);
 
-    expect(screen.getByLabelText(/title/i)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByLabelText(/title/i)).toBeInTheDocument();
+    });
     expect(screen.getByLabelText(/content/i)).toBeInTheDocument();
   });
 
@@ -149,19 +153,23 @@ describe('NotesPage', () => {
     const newNoteButton = screen.getByRole('button', { name: /new note/i });
     await user.click(newNoteButton);
 
-    const cancelButton = screen.getByRole('button', { name: /cancel/i });
-    await user.click(cancelButton);
+    // There are two cancel buttons - one in header and one in form. Get the form one.
+    const cancelButtons = screen.getAllByRole('button', { name: /cancel/i });
+    const formCancelButton = cancelButtons.find(btn => btn.closest('form') !== null) || cancelButtons[1];
+    await user.click(formCancelButton);
 
     await waitFor(() => {
       expect(screen.queryByLabelText(/title/i)).not.toBeInTheDocument();
     });
   });
 
-  it('should render NoteList with notes', () => {
+  it('should render NoteList with notes', async () => {
     mockGetNotes.mockResolvedValue(mockNotes);
     renderNotesPage({ notes: mockNotes });
 
-    expect(screen.getByText('Test Note 1')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Test Note 1')).toBeInTheDocument();
+    });
     expect(screen.getByText('Test Note 2')).toBeInTheDocument();
   });
 
@@ -179,7 +187,7 @@ describe('NotesPage', () => {
     mockGetNotes.mockResolvedValue(mockNotes);
     mockCreateNote.mockResolvedValue(newNote);
 
-    const { store } = renderNotesPage({ notes: mockNotes });
+    renderNotesPage({ notes: mockNotes });
 
     const newNoteButton = screen.getByRole('button', { name: /new note/i });
     await user.click(newNoteButton);
@@ -190,7 +198,7 @@ describe('NotesPage', () => {
     await user.type(titleInput, 'New Note');
     await user.type(contentInput, 'New Content');
 
-    const submitButton = screen.getByRole('button', { name: /submit/i });
+    const submitButton = screen.getByRole('button', { name: /save/i });
     await user.click(submitButton);
 
     await waitFor(() => {

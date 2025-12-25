@@ -9,9 +9,9 @@ import notesReducer, {
   setLoading,
   setNotes,
   updateNote,
-} from '../notesSlice';
-import type { Note } from '../../../types/note.types';
-import { Colors } from '../../../types/note.types';
+} from './notesSlice';
+import type { Note } from '../../types/note.types';
+import { Colors } from '../../types/note.types';
 
 const mockNote: Note = {
   id: '1',

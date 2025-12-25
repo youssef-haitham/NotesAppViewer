@@ -15,7 +15,7 @@ const NoteForm = ({ initialData, onSubmit, onCancel, isSubmitting = false }: Not
     handleSubmit,
     formState: { errors },
   } = useForm<CreateNoteRequest>({
-    defaultValues: initialData,
+    defaultValues: initialData || { title: '', content: '', backgroundColor: Colors.YELLOW },
   });
 
   return (

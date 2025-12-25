@@ -5,8 +5,8 @@ import authReducer, {
   setError,
   setLoading,
   setUser,
-} from '../authSlice';
-import type { User } from '../../../types/auth.types';
+} from './authSlice';
+import type { User } from '../../types/auth.types';
 
 const mockUser: User = {
   id: '1',

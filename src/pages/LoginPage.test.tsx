@@ -37,7 +37,8 @@ describe('LoginPage', () => {
   it('should render login page with title', () => {
     renderLoginPage();
 
-    expect(screen.getByText(/sign in/i)).toBeInTheDocument();
+    // Use getByRole to find the heading, not button text
+    expect(screen.getByRole('heading', { name: /sign in/i })).toBeInTheDocument();
   });
 
   it('should render LoginForm component', () => {

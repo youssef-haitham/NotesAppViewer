@@ -59,7 +59,8 @@ describe('NoteCard', () => {
 
     renderWithRouter(<NoteCard note={longContentNote} />);
 
-    const content = screen.getByText(/a+/);
+    // Get the content element by finding text that contains 'a' and '...' (truncated)
+    const content = screen.getByText(/a+\.\.\.$/);
     expect(content.textContent?.length).toBeLessThanOrEqual(103); // 100 + '...'
   });
 });

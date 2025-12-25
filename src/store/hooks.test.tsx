@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react';
-import { createElement } from 'react';
 import { renderHook } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
@@ -32,7 +31,7 @@ const createMockStore = () => {
 
 const wrapper = ({ children }: { children: ReactNode }) => {
   const store = createMockStore();
-  return createElement(Provider, { store, children });
+  return <Provider store={store}>{children}</Provider>;
 };
 
 describe('hooks', () => {
