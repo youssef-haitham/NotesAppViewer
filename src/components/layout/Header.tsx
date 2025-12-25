@@ -25,8 +25,13 @@ const Header = () => {
     <header className="bg-white dark:bg-gray-800 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link to={ROUTES.NOTES} className="text-xl font-bold text-gray-900 dark:text-white">
-            Notes App
+          <Link to={ROUTES.NOTES} className="flex items-center gap-2 text-xl font-bold text-gray-900 dark:text-white">
+            <img 
+              src="/notes-icon.svg" 
+              alt="Simple Notes" 
+              className="w-8 h-8"
+            />
+            Simple Notes
           </Link>
           <div className="flex items-center gap-4">
             <span className="text-sm text-gray-700 dark:text-gray-300">

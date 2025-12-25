@@ -62,7 +62,7 @@ describe('Header', () => {
       isAuthenticated: true,
     });
 
-    expect(screen.getByText('Notes App')).toBeInTheDocument();
+    expect(screen.getByText('Simple Notes')).toBeInTheDocument();
     expect(screen.getByText('Test User')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /logout/i })).toBeInTheDocument();
   });
@@ -111,7 +111,7 @@ describe('Header', () => {
       isAuthenticated: true,
     });
 
-    const link = screen.getByRole('link', { name: /notes app/i });
+    const link = screen.getByRole('link', { name: /simple notes/i });
     expect(link).toHaveAttribute('href', '/notes');
   });
 });

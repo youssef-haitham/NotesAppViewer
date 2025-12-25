@@ -11,7 +11,7 @@ const NoteCard = ({ note }: NoteCardProps) => {
   return (
     <Link
       to={ROUTES.NOTE_DETAIL(note.id)}
-      className={`block p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow ${getColorClass(note.backgroundColor)}`}
+      className={`block p-4 rounded-lg shadow-md hover:shadow-lg hover:scale-[1.02] transition-all duration-200 cursor-pointer ${getColorClass(note.backgroundColor)}`}
     >
       <h3 className="text-lg font-semibold text-gray-900 mb-2">
         {note.title}
